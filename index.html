@@ -7,21 +7,17 @@
     <style>
         body { font-family: Arial, sans-serif; padding: 15px; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; }
         h2 { text-align: center; color: #333; }
-        
         .form-group { margin-bottom: 12px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
         input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; }
-        
         .catalog { margin-top: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
         .product-info { flex-grow: 1; }
         .product-title { font-weight: bold; }
         .product-price { color: #666; font-size: 14px; }
-        
         .qty-controls { display: flex; align-items: center; gap: 8px; }
-        .qty-btn { width: 30px; height: 30px; border: 1px solid #ccc; background: #e0e0e0; font-weight: bold; cursor: pointer; border-radius: 4px; }
-        .qty-input { width: 40px !important; text-align: center; padding: 5px !important; margin: 0; }
-        
+        .qty-btn { width: 32px; height: 32px; border: 1px solid #ccc; background: #e0e0e0; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 16px; }
+        .qty-input { width: 45px !important; text-align: center; padding: 5px !important; margin: 0; font-size: 15px; }
         .total-box { font-size: 18px; font-weight: bold; text-align: right; margin: 15px 0; }
         .send-btn { width: 100%; padding: 14px; background-color: #25D366; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .send-btn:hover { background-color: #128C7E; }
@@ -31,7 +27,6 @@
 
     <h2>Оформление заказа</h2>
 
-    <!-- Необязательные поля -->
     <div class="form-group">
         <label>Название ИП (необязательно):</label>
         <input type="text" id="ipName" placeholder="Введите название ИП">
@@ -42,11 +37,9 @@
         <input type="text" id="address" placeholder="Введите адрес">
     </div>
 
-    <!-- Каталог товаров -->
     <div class="catalog">
         <h3>Товары</h3>
 
-        <!-- Товар 1 -->
         <div class="product-item">
             <div class="product-info">
                 <div class="product-title">Товар 1</div>
@@ -59,7 +52,6 @@
             </div>
         </div>
 
-        <!-- Товар 2 -->
         <div class="product-item">
             <div class="product-info">
                 <div class="product-title">Товар 2</div>
@@ -72,7 +64,6 @@
             </div>
         </div>
 
-        <!-- Товар 3 -->
         <div class="product-item">
             <div class="product-info">
                 <div class="product-title">Товар 3</div>
@@ -136,7 +127,7 @@
             });
 
             if (!orderList) {
-                alert("Пожалуйста, выберите хотя бы один товар!");
+                alert("Выберите хотя бы один товар!");
                 return;
             }
 
@@ -149,7 +140,6 @@
             
             if (comment) message += `\n📝 *Комментарий:* ${comment}\n`;
 
-            // Вызов WhatsApp без указания конкретного номера
             const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
             window.open(waUrl, '_blank');
         }
