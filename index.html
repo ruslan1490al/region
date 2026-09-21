@@ -5,57 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заказ товаров</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 15px; max-width: 500px; margin: 0 auto; }
-        .field { margin-bottom: 12px; }
+        body { font-family: Arial, sans-serif; padding: 15px; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; }
+        h2 { text-align: center; color: #333; }
+        
+        .form-group { margin-bottom: 12px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; }
-        button { width: 100%; padding: 12px; background-color: #25D366; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        button:hover { background-color: #128C7E; }
+        input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; }
+        
+        .catalog { margin-top: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .product-info { flex-grow: 1; }
+        .product-title { font-weight: bold; }
+        .product-price { color: #666; font-size: 14px; }
+        
+        .qty-controls { display: flex; align-items: center; gap: 8px; }
+        .qty-btn { width: 30px; height: 30px; border: 1px solid #ccc; background: #e0e0e0; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .qty-input { width: 40px !important; text-align: center; padding: 5px !important; margin: 0; }
+        
+        .total-box { font-size: 18px; font-weight: bold; text-align: right; margin: 15px 0; }
+        .send-btn { width: 100%; padding: 14px; background-color: #25D366; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .send-btn:hover { background-color: #128C7E; }
     </style>
 </head>
 <body>
 
     <h2>Оформление заказа</h2>
 
-    <div class="field">
+    <!-- Необязательные поля -->
+    <div class="form-group">
         <label>Название ИП (необязательно):</label>
         <input type="text" id="ipName" placeholder="Введите название ИП">
     </div>
 
-    <div class="field">
+    <div class="form-group">
         <label>Адрес (необязательно):</label>
         <input type="text" id="address" placeholder="Введите адрес">
     </div>
 
-    <div class="field">
-        <label>Содержание заказа / Комментарий:</label>
-        <textarea id="orderComment" rows="4" placeholder="Список товаров или комментарий к заказу..."></textarea>
+    <!-- Каталог товаров -->
+    <div class="catalog">
+        <h3>Товары</h3>
+
+        <!-- Товар 1 -->
+        <div class="product-item">
+            <div class="product-info">
+                <div class="product-title">Товар 1</div>
+                <div class="product-price">1000 ₸</div>
+            </div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty('p1', -1)">-</button>
+                <input type="number" id="p1" class="qty-input" value="0" min="0" data-name="Товар 1" data-price="1000" onchange="calculateTotal()">
+                <button class="qty-btn" onclick="changeQty('p1', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Товар 2 -->
+        <div class="product-item">
+            <div class="product-info">
+                <div class="product-title">Товар 2</div>
+                <div class="product-price">1500 ₸</div>
+            </div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty('p2', -1)">-</button>
+                <input type="number" id="p2" class="qty-input" value="0" min="0" data-name="Товар 2" data-price="1500" onchange="calculateTotal()">
+                <button class="qty-btn" onclick="changeQty('p2', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Товар 3 -->
+        <div class="product-item">
+            <div class="product-info">
+                <div class="product-title">Товар 3</div>
+                <div class="product-price">2000 ₸</div>
+            </div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty('p3', -1)">-</button>
+                <input type="number" id="p3" class="qty-input" value="0" min="0" data-name="Товар 3" data-price="2000" onchange="calculateTotal()">
+                <button class="qty-btn" onclick="changeQty('p3', 1)">+</button>
+            </div>
+        </div>
+
+        <div class="total-box">Итого: <span id="totalSum">0</span> ₸</div>
     </div>
 
-    <button onclick="sendToWhatsApp()">Отправить в WhatsApp</button>
+    <div class="form-group" style="margin-top: 15px;">
+        <label>Комментарий к заказу:</label>
+        <textarea id="comment" rows="3" placeholder="Дополнительные пожелания..."></textarea>
+    </div>
+
+    <button class="send-btn" onclick="sendToWhatsApp()">Отправить в WhatsApp</button>
 
     <script>
+        function changeQty(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const items = document.querySelectorAll('.qty-input');
+            let total = 0;
+            items.forEach(item => {
+                const qty = parseInt(item.value) || 0;
+                const price = parseInt(item.getAttribute('data-price')) || 0;
+                total += qty * price;
+            });
+            document.getElementById('totalSum').innerText = total;
+        }
+
         function sendToWhatsApp() {
             const ipName = document.getElementById('ipName').value.trim();
             const address = document.getElementById('address').value.trim();
-            const comment = document.getElementById('orderComment').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+            const items = document.querySelectorAll('.qty-input');
+
+            let orderList = "";
+            let totalSum = 0;
+
+            items.forEach(item => {
+                const qty = parseInt(item.value) || 0;
+                if (qty > 0) {
+                    const name = item.getAttribute('data-name');
+                    const price = parseInt(item.getAttribute('data-price'));
+                    const sum = qty * price;
+                    totalSum += sum;
+                    orderList += `• ${name} — ${qty} шт. x ${price} = ${sum} ₸\n`;
+                }
+            });
+
+            if (!orderList) {
+                alert("Пожалуйста, выберите хотя бы один товар!");
+                return;
+            }
 
             let message = "📦 *Новый заказ*\n\n";
+            if (ipName) message += `🏢 *ИП:* ${ipName}\n`;
+            if (address) message += `📍 *Адрес:* ${address}\n`;
+            
+            message += `\n🛒 *Выбранные товары:*\n${orderList}`;
+            message += `\n💰 *Итого:* ${totalSum} ₸\n`;
+            
+            if (comment) message += `\n📝 *Комментарий:* ${comment}\n`;
 
-            // Добавляем ИП и Адрес только если они заполнены
-            if (ipName) {
-                message += "🏢 *ИП:* " + ipName + "\n";
-            }
-            if (address) {
-                message += "📍 *Адрес:* " + address + "\n";
-            }
-            if (comment) {
-                message += "\n📝 *Заказ / Комментарий:*\n" + comment + "\n";
-            }
-
-            // Универсальная ссылка без номера — откроет выбор контакта в WhatsApp
+            // Вызов WhatsApp без указания конкретного номера
             const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
-
             window.open(waUrl, '_blank');
         }
     </script>
