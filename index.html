@@ -5,22 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заказ товаров</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 15px; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; }
-        h2 { text-align: center; color: #333; }
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 15px; max-width: 600px; margin: 0 auto; background-color: #f4f5f7; color: #222; }
+        h2 { text-align: center; margin-bottom: 20px; font-size: 22px; }
+        
         .form-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; }
-        .catalog { margin-top: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .product-info { flex-grow: 1; }
-        .product-title { font-weight: bold; }
-        .product-price { color: #666; font-size: 14px; }
-        .qty-controls { display: flex; align-items: center; gap: 8px; }
-        .qty-btn { width: 32px; height: 32px; border: 1px solid #ccc; background: #e0e0e0; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 16px; }
-        .qty-input { width: 45px !important; text-align: center; padding: 5px !important; margin: 0; font-size: 15px; }
-        .total-box { font-size: 18px; font-weight: bold; text-align: right; margin: 15px 0; }
-        .send-btn { width: 100%; padding: 14px; background-color: #25D366; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .send-btn:hover { background-color: #128C7E; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+        input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; background: #fff; }
+        input[type="text"]:focus, textarea:focus { border-color: #25D366; }
+
+        .catalog { margin-top: 20px; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .catalog h3 { margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; font-size: 18px; }
+
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .product-item:last-child { border-bottom: none; }
+        .product-info { flex-grow: 1; padding-right: 10px; }
+        .product-title { font-weight: 600; font-size: 15px; }
+        .product-price { color: #666; font-size: 13px; margin-top: 2px; }
+
+        .qty-controls { display: flex; align-items: center; gap: 6px; }
+        .qty-btn { width: 36px; height: 36px; border: 1px solid #ddd; background: #f8f9fa; font-weight: bold; cursor: pointer; border-radius: 6px; font-size: 18px; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+        .qty-btn:active { background: #e2e6ea; }
+        .qty-input { width: 45px !important; text-align: center; padding: 6px 2px !important; margin: 0; font-size: 16px; font-weight: bold; border: 1px solid #ddd; border-radius: 6px; }
+
+        .total-box { font-size: 18px; font-weight: 700; text-align: right; margin-top: 15px; padding-top: 10px; border-top: 2px solid #f0f0f0; }
+        .send-btn { width: 100%; padding: 15px; background-color: #25D366; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .send-btn:active { background-color: #128C7E; }
     </style>
 </head>
 <body>
@@ -38,40 +48,43 @@
     </div>
 
     <div class="catalog">
-        <h3>Товары</h3>
+        <h3>Каталог товаров</h3>
 
+        <!-- Позиция 1 -->
         <div class="product-item">
             <div class="product-info">
-                <div class="product-title">Товар 1</div>
+                <div class="product-title">Наименование товара 1</div>
                 <div class="product-price">1000 ₸</div>
             </div>
             <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('p1', -1)">-</button>
-                <input type="number" id="p1" class="qty-input" value="0" min="0" data-name="Товар 1" data-price="1000" onchange="calculateTotal()">
+                <input type="number" id="p1" class="qty-input" value="0" min="0" data-name="Наименование товара 1" data-price="1000" onchange="calculateTotal()">
                 <button class="qty-btn" onclick="changeQty('p1', 1)">+</button>
             </div>
         </div>
 
+        <!-- Позиция 2 -->
         <div class="product-item">
             <div class="product-info">
-                <div class="product-title">Товар 2</div>
+                <div class="product-title">Наименование товара 2</div>
                 <div class="product-price">1500 ₸</div>
             </div>
             <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('p2', -1)">-</button>
-                <input type="number" id="p2" class="qty-input" value="0" min="0" data-name="Товар 2" data-price="1500" onchange="calculateTotal()">
+                <input type="number" id="p2" class="qty-input" value="0" min="0" data-name="Наименование товара 2" data-price="1500" onchange="calculateTotal()">
                 <button class="qty-btn" onclick="changeQty('p2', 1)">+</button>
             </div>
         </div>
 
+        <!-- Позиция 3 -->
         <div class="product-item">
             <div class="product-info">
-                <div class="product-title">Товар 3</div>
+                <div class="product-title">Наименование товара 3</div>
                 <div class="product-price">2000 ₸</div>
             </div>
             <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('p3', -1)">-</button>
-                <input type="number" id="p3" class="qty-input" value="0" min="0" data-name="Товар 3" data-price="2000" onchange="calculateTotal()">
+                <input type="number" id="p3" class="qty-input" value="0" min="0" data-name="Наименование товара 3" data-price="2000" onchange="calculateTotal()">
                 <button class="qty-btn" onclick="changeQty('p3', 1)">+</button>
             </div>
         </div>
